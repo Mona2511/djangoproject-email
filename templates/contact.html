@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% include 'menu.html' %}
+    <h1> Hello contact Page </h1>
+    <form method="post" action="/contactprocess">
+        {% csrf_token %}
+        Maths : <input type="number" min="1" max="100" name="txt1" required autocomplete="off"/>
+        Science : <input type="number" name="txt2" min="1" max="100" required autocomplete="off"/>
+        SST : <input type="number" name="txt3" min="1" max="100" required autocomplete="off"/>
+        Sanskrit : <input type="number" name="txt4" min="1" max="100" required autocomplete="off"/>
+        English : <input type="number" name="txt5" min="1" max="100" required autocomplete="off"/>
+        <input type="submit"/>
+
+    </form>
+</body>
+</html>
