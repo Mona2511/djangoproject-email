@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
+from . models import Student
+from . models import Category, Product
 # Create your views here.
 
 def mailsenddemo(request):
@@ -81,3 +83,55 @@ def dashboard(request):
 def logout(request):
     del request.session['myemail']
     return redirect(loginpage)
+
+def addstudentform(request):
+    return render(request,'add-student.html')
+
+def addstudentformprocess(request):
+    txt1 = request.POST['txt1']
+    txt2 = request.POST['txt2']
+    txt3 = request.POST['txt3']
+    txt4 = request.POST['txt4']
+    Student.objects.create(name=txt1,mobile=txt2,email=txt3,address=txt4)
+    mymsg = "Hello has Contact you",txt1," Mobile No is ",txt2," Email is ",txt3," Address is ",txt4
+    subject ='Contact us From Website'
+    email_from = settings.EMAIL_HOST_USER
+    message = mymsg
+    recipient_list = ['monalichangla@gmail.com',]
+    send_mail(subject, message, email_from, recipient_list)
+    return HttpResponse("Thank you for Signing in")
+
+def displayStudent(request):
+    mystudentlist = Student.objects.all()
+    return render(request, 'display_student.html',{'mydata': mystudentlist})
+
+def deleteStudent(request,id):
+    Student.objects.get(id=id).delete()
+    return redirect(displayStudent)
+
+def add_category(request):
+    if request.method == "POST":
+        txt1 = request.POST['txt1']
+        Category.objects.create(title=txt1)
+        return redirect('add_category')
+    return render(request, 'add-category.html')
+
+def display_category(request):
+    category_list = Category.objects.all()
+
+    return render(request, "display-category.html",{
+        "category_list": category_list
+    })
+def delete_category(request, id):
+    Category.objects.get(id=id).delete()
+    return redirect('display-category')
+
+def edit_category(request, id):
+    category = Category.objects.get(id=id)
+
+    if request.method == "POST":
+        category.title = request.POST['txt1']
+        category.save()
+        return redirect('display-cateory')
+
+    return render(request, 'edit-category.html', {'category': category})

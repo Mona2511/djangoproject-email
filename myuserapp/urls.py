@@ -17,4 +17,12 @@ urlpatterns = [
     path('dashboard',views.dashboard),
     path('logout',views.logout),
     path('maildemo',views.mailsenddemo),
-]
+    path('addstudent',views.addstudentform),
+    path('add-student-process',views.addstudentformprocess),
+    path('display-student',views.displayStudent),
+    path('delete-student/<int:id>',views.deleteStudent),
+    path('add-category/',views.add_category, name='add_category'),
+    path('display-category/', views.display_category, name='display_category'),
+    path('delete-category/<int:id>/', views.delete_category, name='delete_category'),
+    path('edit-category/<int:id>/', views.edit_category, name='edit_product'),
+]          
