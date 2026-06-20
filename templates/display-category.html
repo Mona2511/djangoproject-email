@@ -18,12 +18,12 @@
                 <td>{{c.id}}</td>
                 <td>{{c.title}}</td>
                 <td>
-                    <a href="/edit-category/{{c.id}}/" >Edit</a> |
+                    <a href="/edit-category/{{ category.id }}/">Edit</a>|
                     <a href="/delete-category/{{c.id}}/"
                     onclick="return confirm('Are you Sure?')">Delete</a>
                 </td>
             </tr>
             {% endfor %}
-            </table>
+    </table>
 </body>
 </html>

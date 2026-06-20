@@ -22,7 +22,12 @@ urlpatterns = [
     path('display-student',views.displayStudent),
     path('delete-student/<int:id>',views.deleteStudent),
     path('add-category/',views.add_category, name='add_category'),
-    path('display-category/', views.display_category, name='display_category'),
-    path('delete-category/<int:id>/', views.delete_category, name='delete_category'),
-    path('edit-category/<int:id>/', views.edit_category, name='edit_product'),
+    path('display-category/',views.display_category, name='display_category'),
+    path('delete-category/<int:id>/',views.delete_category, name='delete_category'),
+    path('edit-category/<int:id>/',views.edit_category, name='edit_category'),
+    path('', views.user_login_view, name='login'),
+    path('user_register/', views.user_register_view, name='register'),
+    path('user_home/', views.user_home_view, name='home'),
+    path('user_logout/', views.logout_view, name='logout'),
+    path('product',views.displayProduct, name='product')
 ]          

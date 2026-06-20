@@ -4,6 +4,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from . models import Student
 from . models import Category, Product
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 # Create your views here.
 
 def mailsenddemo(request):
@@ -105,6 +108,10 @@ def displayStudent(request):
     mystudentlist = Student.objects.all()
     return render(request, 'display_student.html',{'mydata': mystudentlist})
 
+def displayProduct(request):
+    productlist = Product.objects.all()
+    return render(request, 'product.html',{'mydata': productlist})
+
 def deleteStudent(request,id):
     Student.objects.get(id=id).delete()
     return redirect(displayStudent)
@@ -117,21 +124,69 @@ def add_category(request):
     return render(request, 'add-category.html')
 
 def display_category(request):
-    category_list = Category.objects.all()
+    categorylist = Category.objects.all()
+    return render(request, "display-category.html",{'category': categorylist})
 
-    return render(request, "display-category.html",{
-        "category_list": category_list
-    })
 def delete_category(request, id):
     Category.objects.get(id=id).delete()
-    return redirect('display-category')
+    return redirect('display_category')
 
 def edit_category(request, id):
     category = Category.objects.get(id=id)
-
     if request.method == "POST":
         category.title = request.POST['txt1']
         category.save()
-        return redirect('display-cateory')
-
+        return redirect('display_category')
     return render(request, 'edit-category.html', {'category': category})
+
+def user_register_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists")
+            return redirect('register')
+
+        User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        messages.success(request, "Registration Successful")
+        return redirect('login')
+
+    return render(request, 'user_register.html')
+
+
+def user_login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, "Invalid Username or Password")
+
+    return render(request, 'user_login.html')
+
+def user_home_view(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    return render(request, 'user_home.html')
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
